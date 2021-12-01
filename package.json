@@ -10,7 +10,11 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:react-intl-umi.helloWorld"
+        "onCommand:react-intl-umi.helloWorld",
+				"onLanguage:javascriptreact",
+				"onLanguage:javascript",
+				"onLanguage:typescript",
+				"onLanguage:typescriptreact"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -19,7 +23,17 @@
 				"command": "react-intl-umi.helloWorld",
 				"title": "Hello World"
 			}
-		]
+		],
+		"configuration": {
+			"title": "react-intl-umi配置",
+			"properties": {
+				"react-intl-umi.configPath": {
+					"type": "string",
+					"default": "src/locales",
+					"description": "国际化配置文件地址"
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
