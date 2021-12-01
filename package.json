@@ -31,6 +31,16 @@
 					"type": "string",
 					"default": "src/locales",
 					"description": "国际化配置文件地址"
+				},
+				"react-intl-umi.suffix": {
+					"type": "string",
+					"default": ".ts",
+					"description": "国际化配置文件后缀"
+				},
+				"react-intl-umi.regExp": {
+					"type": "string",
+					"default": "intl.formatMessage({ id: '$1' })",
+					"description": "匹配格式"
 				}
 			}
 		}

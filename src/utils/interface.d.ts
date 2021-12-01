@@ -9,6 +9,10 @@ export interface ILocales {
 export interface IConfig {
   // 国际化配置文件路径
   configPath: string;
+  // 国际化配置文件后缀
+  suffix: string;
+  // 匹配格式
+  regExp: string;
 }
 
 export type IObject = Record<string, any>
