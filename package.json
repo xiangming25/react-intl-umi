@@ -1,8 +1,10 @@
 {
   "name": "react-intl-umi",
 	"displayName": "react-intl-umi",
+	"publisher": "xiangming",
 	"description": "a vscode plugin for react-intl and umi-locale",
 	"version": "0.0.1",
+	"repository": "https://github.com/xiangming25/react-intl-umi",
 	"engines": {
 		"vscode": "^1.62.0"
 	},
