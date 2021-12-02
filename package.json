@@ -2,8 +2,9 @@
   "name": "react-intl-umi",
 	"displayName": "react-intl-umi",
 	"publisher": "xiangming",
-	"description": "a vscode plugin for react-intl and umi-locale",
-	"version": "0.0.1",
+	"description": "react-intl umi-locale 国际化自动提示插件",
+	"version": "0.0.2",
+	"icon": "logo.png",
 	"repository": "https://github.com/xiangming25/react-intl-umi",
 	"engines": {
 		"vscode": "^1.62.0"
@@ -12,7 +13,6 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:react-intl-umi.helloWorld",
 				"onLanguage:javascriptreact",
 				"onLanguage:javascript",
 				"onLanguage:typescript",
@@ -20,12 +20,7 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
-			{
-				"command": "react-intl-umi.helloWorld",
-				"title": "Hello World"
-			}
-		],
+		"commands": [],
 		"configuration": {
 			"title": "react-intl-umi配置",
 			"properties": {
@@ -43,6 +38,11 @@
 					"type": "string",
 					"default": "intl.formatMessage({ id: '$1' })",
 					"description": "匹配格式"
+				},
+				"react-intl-umi.watchMode": {
+					"type": "boolean",
+					"default": false,
+					"description": "国际化语言发生改变时，是否监听变化"
 				}
 			}
 		}
