@@ -14,6 +14,7 @@
 * `react-intl-umi.configPath`: 当前国际化文本内容的位置
 * `react-intl-umi.suffix`: 国际化文件的后缀
 * `react-intl-umi.regExp`: 在代码中的匹配规则
+* `react-intl-umi.watchMode`: 国际化语言发生改变时，是否监听变化
 
 
 ## Release Notes
