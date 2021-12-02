@@ -54,7 +54,8 @@ async function getContent(localesPath: string, directory: [string, FileType][]) 
       }
       for (let j = 0; j<importUrls.length; j++) {
         const childContent = await fs.readFile(Uri.file(`${localesPath}${importUrls[j]}${config.suffix}`));
-        const childContentStr = childContent.toString();
+        let childContentStr = childContent.toString();
+        childContentStr = childContentStr.replace(/(:\s{0,})[\n\r]\s{0,}(['"])/g, '$1$2');
         const childContentArr = childContentStr.match(contentReg);
         childContentArr?.forEach(item => {
           const itemArr = item.split(':');
