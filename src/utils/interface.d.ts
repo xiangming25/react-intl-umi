@@ -13,6 +13,8 @@ export interface IConfig {
   suffix: string;
   // 匹配格式
   regExp: string;
+  // 国际化语言发生改变时，是否监听变化
+  watchMode: boolean;
 }
 
 export type IObject = Record<string, any>
