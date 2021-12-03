@@ -1,5 +1,5 @@
 import config from './config';
-import { workspace, Uri, FileType, window, TextDocument, MarkdownString } from 'vscode';
+import { workspace, Uri, FileType, window, TextDocument, MarkdownString, Location, Position } from 'vscode';
 import { ILocales, IObject } from './interface';
 
 let localsData: ILocales | undefined;
@@ -41,7 +41,7 @@ async function getContent(localesPath: string, directory: [string, FileType][]) 
       const valueReg = /^\s{0,}['"](.*?)['"]/;
       // 匹配国际化配置根文件下的配置内容
       const contentArr = contentStr.match(contentReg);
-      const obj: IObject = {};
+      let obj: IObject = {};
       contentArr?.forEach(item => {
         const itemArr = item.split(':');
         obj[itemArr[0].replace(/['"]/g, '')] = itemArr[1].replace(valueReg, '$1');
@@ -54,13 +54,11 @@ async function getContent(localesPath: string, directory: [string, FileType][]) 
       }
       for (let j = 0; j<importUrls.length; j++) {
         const childContent = await fs.readFile(Uri.file(`${localesPath}${importUrls[j]}${config.suffix}`));
-        let childContentStr = childContent.toString();
-        childContentStr = childContentStr.replace(/(:\s{0,})[\n\r]\s{0,}(['"])/g, '$1$2');
-        const childContentArr = childContentStr.match(contentReg);
-        childContentArr?.forEach(item => {
-          const itemArr = item.split(':');
-          obj[itemArr[0].replace(/['"]/g, '')] = itemArr[1].replace(valueReg, '$1');
-        });
+        const childContentObj = formatChildDetail(childContent.toString());
+        obj = {
+          ...obj,
+          ...childContentObj
+        };
       }
       result[fileName] = obj;
   
@@ -69,6 +67,26 @@ async function getContent(localesPath: string, directory: [string, FileType][]) 
     }
   }
   return result;
+}
+
+/**
+ * 格式化子内容为对象
+ * @param str
+ * @returns
+ */
+function formatChildDetail(str: string) {
+  const contentReg = /(['"]?[\w-.]+['"]?:\s?['"].*?['"])/g;
+  const valueReg = /^\s{0,}['"](.*?)['"]/;
+
+  const newStr = str.replace(/(:\s{0,})[\n\r]\s{0,}(['"])/g, '$1$2');
+  const resultObj: IObject = {};
+  const resultArr: Array<[string, string]> = [];
+  const childContentArr = newStr.match(contentReg);
+  childContentArr?.forEach(item => {
+    const itemArr = item.split(':');
+    resultObj[itemArr[0].replace(/['"]/g, '')] = itemArr[1].replace(valueReg, '$1');
+  });
+  return resultObj;
 }
 
 
@@ -138,7 +156,7 @@ export function getRegExp(regExpStr:string){
  * @param document 当前文档对象
  * @param dictionary 多语言字典
  */
- export function getTips(value:string, dictionary:any){
+export function getTips(value:string, dictionary:any){
   const re = new MarkdownString();
 
   let str='';
@@ -153,3 +171,111 @@ export function getRegExp(regExpStr:string){
   re.appendMarkdown(str);
   return re;
 };
+
+/**
+ * 获取文件位置
+ */
+export async function getWordLocation(value: string) {
+  const { fs, workspaceFolders } = workspace;
+  let re=[];
+  if (!localsData || !workspaceFolders?.length) {return;}
+
+  try {
+    const localesPath = workspaceFolders[0].uri.fsPath+'/'+config.configPath;
+    const directory = await fs.readDirectory(Uri.file(localesPath));
+    const fileReg = new RegExp(config.suffix+'$');
+    const newDirectory = directory.filter(item => fileReg.test(item[0])) || [];
+    // 找到根目录下，所以以配置中的后缀结尾的文件
+    let filePathArr: any[] = newDirectory.map(item => Uri.file(`${localesPath}/${item[0]}`));
+    if(!filePathArr.length) {return;};
+
+    // 读取根目录文件下的引入文件路径
+    for (let i = 0; i<filePathArr.length; i++) {
+      const rootContent = await fs.readFile(filePathArr[i]);
+      const rootContentStr = rootContent.toString();
+      // 匹配项目中的相对路径
+      const importUrls = rootContentStr.match(/(?<=import.*?['"]\.).*(?=['"])/g) || [];
+      filePathArr = filePathArr.concat(importUrls.map(item => Uri.file(`${localesPath}${item}${config.suffix}`)));
+    }
+
+    for (let i = 0; i < filePathArr.length; i++) {
+      const word = await wordLocation(value,filePathArr[i]);
+      if(word){
+        re.push(
+          new Location(Uri.file(word.filePath), new Position(word.lineIndex, word.wordIndex))
+        );
+      }
+    }
+
+  } catch (error) {
+    console.error(error);
+  }
+
+  return re;
+}
+
+// 查看当前匹配内容位置
+async function wordLocation(value:string, filePath:Uri) {
+  const { fs } = workspace;
+  const re = {
+    filePath: '',
+    lineIndex: 0,
+    wordIndex: 0
+  };
+
+  try {
+    const content= await fs.readFile(filePath);
+    const contentArr = uint8ArrayToString(content).split("\n");
+    for (let i = 0; i < contentArr.length; i++) {
+      const element = contentArr[i];
+      const regMatch = element.match(new RegExp(`${value}['"]?\\s*:\\s*['"]?`));
+      if(regMatch){
+        re.lineIndex = i;
+        re.wordIndex = regMatch[0].length + (regMatch.index || 0) ;
+        re.filePath = filePath.path;
+        break;
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+  if(re.filePath){
+    return re;
+  }
+}
+
+/** Uint8Array转字符串 */
+export function uint8ArrayToString(array:Uint8Array) {
+	var out, i, len, c;
+	var char2, char3;
+
+	out = "";
+	len = array.length;
+	i = 0;
+	while(i < len) {
+	c = array[i++];
+	switch(c >> 4)
+	{
+		case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
+			// 0xxxxxxx
+			out += String.fromCharCode(c);
+			break;
+		case 12: case 13:
+			// 110x xxxx   10xx xxxx
+			char2 = array[i++];
+			out += String.fromCharCode(((c & 0x1F) << 6) | (char2 & 0x3F));
+			break;
+		case 14:
+			// 1110 xxxx  10xx xxxx  10xx xxxx
+			char2 = array[i++];
+			char3 = array[i++];
+			out += String.fromCharCode(((c & 0x0F) << 12) |
+										 ((char2 & 0x3F) << 6) |
+										 ((char3 & 0x3F) << 0));
+			break;
+	}
+	}
+
+	return out;
+}
