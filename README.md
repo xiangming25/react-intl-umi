@@ -8,6 +8,7 @@
 
 ## Requirements
 
+- `react-intl-umi.configPath` 下面的文件的引用位置为相对路径
 
 ## Extension Settings
 
@@ -33,3 +34,12 @@
 ### 0.0.1
 
 添加鼠标移动上去后的国际化文案提示
+
+## TODO
+
+- 优化性能
+- 添加 `example` 项目
+
+## 参考链接
+
+[react-intl-universal-i18n](https://github.com/Java-http/react-intl-universal-i18n)
