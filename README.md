@@ -19,6 +19,10 @@
 
 ## Release Notes
 
+### 0.0.4
+
+添加 `intl.formatMessage({ id: '$1' })` 代码片段
+
 ### 0.0.3
 
 添加按住 `ctrl`+ `intl.formatMessage({ id: $1 })` 中的内容的跳转
