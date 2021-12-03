@@ -10,7 +10,8 @@
 		"vscode": "^1.62.0"
 	},
 	"categories": [
-		"Other"
+		"Other",
+		"Snippets"
 	],
 	"activationEvents": [
 				"onLanguage:javascriptreact",
@@ -45,7 +46,13 @@
 					"description": "国际化语言发生改变时，是否监听变化"
 				}
 			}
-		}
+		},
+		"snippets": [
+			{
+				"language": "",
+				"path": "./snippets/intl.code-snippets"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",

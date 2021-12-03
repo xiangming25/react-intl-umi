@@ -1,0 +1,9 @@
+{
+  "intl-formatMessage": {
+    "prefix": "intl",
+    "body": [
+      "intl.formatMessage({ id: '$1' })",
+    ],
+    "description": "国际化代码片段"
+  }
+}
