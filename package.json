@@ -3,7 +3,7 @@
 	"displayName": "react-intl-umi",
 	"publisher": "xiangming",
 	"description": "react-intl umi-locale 国际化自动提示插件",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"icon": "logo.png",
 	"repository": "https://github.com/xiangming25/react-intl-umi",
 	"engines": {
@@ -41,7 +41,7 @@
 				},
 				"react-intl-umi.watchMode": {
 					"type": "boolean",
-					"default": false,
+					"default": true,
 					"description": "国际化语言发生改变时，是否监听变化"
 				}
 			}

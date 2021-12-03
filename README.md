@@ -19,6 +19,9 @@
 
 ## Release Notes
 
+### 0.0.3
+
+添加按住 `ctrl`+ `intl.formatMessage({ id: $1 })` 中的内容的跳转
 ### 0.0.2
 
 添加 `watchMode` 功能，当在配置的国际化文件中修改了内容后，会自动刷新
