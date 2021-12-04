@@ -20,6 +20,10 @@
 
 ## Release Notes
 
+### 0.0.5
+
+优化多语言查询内容性能
+
 ### 0.0.4
 
 添加 `intl.formatMessage({ id: '$1' })` 代码片段
