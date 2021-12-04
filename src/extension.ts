@@ -38,4 +38,5 @@ export async function activate() {
 // 退出 vscode 时，关闭监听
 export function deactivate() {
 	registerHoverProvider?.dispose();
+	registerDefinitionProvider?.dispose();
 }

@@ -1,7 +1,12 @@
+export interface ILocale {
+  value: string;
+  path: string;
+}
+
 // 国际化配置内容格式
 export interface ILocales {
   [index: string]: {
-    [key: string]: string | number | boolean
+    [key: string]: ILocale
   }
 }
 

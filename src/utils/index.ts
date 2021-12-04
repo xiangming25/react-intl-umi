@@ -1,5 +1,5 @@
 import config from './config';
-import { workspace, Uri, FileType, window, TextDocument, MarkdownString, Location, Position } from 'vscode';
+import { workspace, Uri, FileType, window, MarkdownString, Location, Position } from 'vscode';
 import { ILocales, IObject } from './interface';
 
 let localsData: ILocales | undefined;
@@ -8,7 +8,7 @@ let localsData: ILocales | undefined;
 export async function checkHasLocales() {
   const { workspaceFolders, fs } = workspace;
   if (!workspaceFolders?.length) {return;}
-  
+
   console.log('获取国际化文件内容...');
   let result: ILocales | undefined;
 
@@ -44,7 +44,10 @@ async function getContent(localesPath: string, directory: [string, FileType][]) 
       let obj: IObject = {};
       contentArr?.forEach(item => {
         const itemArr = item.split(':');
-        obj[itemArr[0].replace(/['"]/g, '')] = itemArr[1].replace(valueReg, '$1');
+        obj[itemArr[0].replace(/['"]/g, '')] = {
+          value: itemArr[1].replace(valueReg, '$1'),
+          path: elePath,
+        };
       });
       // 匹配项目中的相对路径
       const importUrls = contentStr.match(/(?<=import.*?['"]\.).*(?=['"])/g);
@@ -52,9 +55,11 @@ async function getContent(localesPath: string, directory: [string, FileType][]) 
         result[fileName] = obj;
         continue;
       }
+      // 循环读取引入文件中的内容
       for (let j = 0; j<importUrls.length; j++) {
-        const childContent = await fs.readFile(Uri.file(`${localesPath}${importUrls[j]}${config.suffix}`));
-        const childContentObj = formatChildDetail(childContent.toString());
+        const childPath = `${localesPath}${importUrls[j]}${config.suffix}`;
+        const childContent = await fs.readFile(Uri.file(childPath));
+        const childContentObj = formatChildDetail(childContent.toString(), childPath);
         obj = {
           ...obj,
           ...childContentObj
@@ -74,17 +79,19 @@ async function getContent(localesPath: string, directory: [string, FileType][]) 
  * @param str
  * @returns
  */
-function formatChildDetail(str: string) {
-  const contentReg = /(['"]?[\w-.]+['"]?:\s?['"].*?['"])/g;
-  const valueReg = /^\s{0,}['"](.*?)['"]/;
+function formatChildDetail(str: string, childPath: string) {
+  const contentReg = /(['"`]?[\w-.]+['"`]?:\s?['"`].*?['"`])/g;
+  const valueReg = /^\s{0,}['"`](.*?)['"`]/;
 
-  const newStr = str.replace(/(:\s{0,})[\n\r]\s{0,}(['"])/g, '$1$2');
+  const newStr = str.replace(/(:\s{0,})[\n\r]\s{0,}(['"`])/g, '$1$2');
   const resultObj: IObject = {};
-  const resultArr: Array<[string, string]> = [];
   const childContentArr = newStr.match(contentReg);
   childContentArr?.forEach(item => {
     const itemArr = item.split(':');
-    resultObj[itemArr[0].replace(/['"]/g, '')] = itemArr[1].replace(valueReg, '$1');
+    resultObj[itemArr[0].replace(/['"]/g, '')] = {
+      value: itemArr[1].replace(valueReg, '$1'),
+      path: childPath,
+    };
   });
   return resultObj;
 }
@@ -163,7 +170,7 @@ export function getTips(value:string, dictionary:any){
   for (const k of Object.keys(dictionary)) {
     if(dictionary[k][value]){
       str += `
-      "${k}" : "${dictionary[k][value]}"  `;
+      "${k}" : "${dictionary[k][value].value}"  `;
     }
   }
   if(str==='') {str="没有找到该key值的多语言,请检查是否正确设置了?";};
@@ -176,39 +183,24 @@ export function getTips(value:string, dictionary:any){
  * 获取文件位置
  */
 export async function getWordLocation(value: string) {
-  const { fs, workspaceFolders } = workspace;
+  const { workspaceFolders } = workspace;
   let re=[];
-  if (!localsData || !workspaceFolders?.length) {return;}
+  if (!localsData || !workspaceFolders?.length || !value) {return;}
+  const checkHasLocales = Object.keys(localsData).every(key => localsData?.[key]?.[value]);
+  if (!checkHasLocales) {return;};
 
   try {
-    const localesPath = workspaceFolders[0].uri.fsPath+'/'+config.configPath;
-    const directory = await fs.readDirectory(Uri.file(localesPath));
-    const fileReg = new RegExp(config.suffix+'$');
-    const newDirectory = directory.filter(item => fileReg.test(item[0])) || [];
-    // 找到根目录下，所以以配置中的后缀结尾的文件
-    let filePathArr: any[] = newDirectory.map(item => Uri.file(`${localesPath}/${item[0]}`));
-    if(!filePathArr.length) {return;};
-
-    // 读取根目录文件下的引入文件路径
-    for (let i = 0; i<filePathArr.length; i++) {
-      const rootContent = await fs.readFile(filePathArr[i]);
-      const rootContentStr = rootContent.toString();
-      // 匹配项目中的相对路径
-      const importUrls = rootContentStr.match(/(?<=import.*?['"]\.).*(?=['"])/g) || [];
-      filePathArr = filePathArr.concat(importUrls.map(item => Uri.file(`${localesPath}${item}${config.suffix}`)));
-    }
-
+    const filePathArr = Object.keys(localsData).map(key => localsData?.[key]?.[value]?.path);
     for (let i = 0; i < filePathArr.length; i++) {
-      const word = await wordLocation(value,filePathArr[i]);
+      const word = await wordLocation(value, Uri.file(filePathArr[i] as string));
       if(word){
         re.push(
           new Location(Uri.file(word.filePath), new Position(word.lineIndex, word.wordIndex))
         );
       }
     }
-
   } catch (error) {
-    console.error(error);
+    console.log('log:error-------------: ', error);
   }
 
   return re;
