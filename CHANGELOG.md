@@ -1,9 +1,25 @@
 # Change Log
 
-All notable changes to the "react-intl-umi" extension will be documented in this file.
+### 0.0.6
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+- 添加 `example` 项目
+- 优化跳转逻辑
 
-## [Unreleased]
+### 0.0.5
 
-- Initial release
+优化多语言查询内容性能
+
+### 0.0.4
+
+添加 `intl.formatMessage({ id: '$1' })` 代码片段
+
+### 0.0.3
+
+添加按住 `ctrl`+ `intl.formatMessage({ id: $1 })` 中的内容的跳转
+### 0.0.2
+
+添加 `watchMode` 功能，当在配置的国际化文件中修改了内容后，会自动刷新
+
+### 0.0.1
+
+添加鼠标移动上去后的国际化文案提示

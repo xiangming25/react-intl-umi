@@ -3,7 +3,7 @@
 	"displayName": "react-intl-umi",
 	"publisher": "xiangming",
 	"description": "react-intl umi-locale 国际化自动提示插件",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"icon": "logo.png",
 	"repository": "https://github.com/xiangming25/react-intl-umi",
 	"engines": {
@@ -28,22 +28,22 @@
 				"react-intl-umi.configPath": {
 					"type": "string",
 					"default": "src/locales",
-					"description": "国际化配置文件地址"
+					"description": "国际化配置文件的地址"
 				},
 				"react-intl-umi.suffix": {
 					"type": "string",
 					"default": ".ts",
-					"description": "国际化配置文件后缀"
+					"description": "国际化文件的后缀(排除当前文件夹下面其它类型文件"
 				},
 				"react-intl-umi.regExp": {
 					"type": "string",
 					"default": "intl.formatMessage({ id: '$1' })",
-					"description": "匹配格式"
+					"description": "在代码中的匹配规则（$1为需要匹配的字符串内容）"
 				},
 				"react-intl-umi.watchMode": {
 					"type": "boolean",
 					"default": true,
-					"description": "国际化语言发生改变时，是否监听变化"
+					"description": "监听国际化文件的变化"
 				}
 			}
 		},
