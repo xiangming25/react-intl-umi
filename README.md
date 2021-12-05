@@ -2,15 +2,43 @@
 
 一个提供 `react-intl`，`umi-locale` 的代码提示插件
 
-## Features
+## 前提条件
 
-支持使用 `umi` + `umi/locale` 创建的项目的国际化提示
+- 打开的 `vscode` 项目是根目录。比如：直接打开 `example` 项目。而不是打开 `react-intl-umi` 项目，然后 `example` 项目在 `react-intl-umi` 下面。
+- 国际化配置语言下面的引用路径需要是相对路径。
+- 注意 `react-intl-umi.regExp` 中的空格与代码是否一致。建议结合 `eslint` 一起使用。
 
-## Requirements
+## 特色
 
-- `react-intl-umi.configPath` 下面的文件的引用位置为相对路径
+### 鼠标移动上去后，自动弹框提示
 
-## Extension Settings
+
+### 国际化配置文件更新后，自动刷新提示内容
+
+
+### 自定义提示模板
+
+`intl.formatMessage({ id: '$1' })`
+
+```
+{intl.formatMessage({ id: 'pages.getCaptchaSecondText' }
+```
+
+`id: '$1'`
+
+```
+intl.formatMessage({
+  id: 'pages.login.phoneLogin.getVerificationCode',
+  defaultMessage: '获取验证码',
+})
+```
+
+
+### 鼠标点击，直接定位到对应位置
+
+
+
+## 自定义设置
 
 * `react-intl-umi.configPath`: 当前国际化文本内容的位置
 * `react-intl-umi.suffix`: 国际化文件的后缀
@@ -18,7 +46,7 @@
 * `react-intl-umi.watchMode`: 国际化语言发生改变时，是否监听变化
 
 
-## Release Notes
+## 发版日志
 
 ### 0.0.5
 
@@ -43,6 +71,7 @@
 
 - 优化性能
 - 添加 `example` 项目
+- 添加 `defaultMessage`
 
 ## 参考链接
 
