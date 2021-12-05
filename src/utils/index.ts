@@ -144,7 +144,7 @@ export function getRegExp(regExpStr:string){
   let str=regExpStr.replace(/([\.\(\)\$])/g,"\\$1");
   // 转译 '" 为 ['"]
   str=str.replace(/['"]/g,"['\"]");
-  // 转译$1
+  // 转译$1，支持字母、数字、下划线、中横线、点号的数据格式的模板字符串
   str=str.replace(/\\\$1/g,"([\\w-.]+)");
   // 转译)$
   str=str.replace(/(\))$/,"$1?");
@@ -186,7 +186,8 @@ export async function getWordLocation(value: string) {
   const { workspaceFolders } = workspace;
   let re=[];
   if (!localsData || !workspaceFolders?.length || !value) {return;}
-  const checkHasLocales = Object.keys(localsData).every(key => localsData?.[key]?.[value]);
+  // 只要有文件包含，就可以跳转
+  const checkHasLocales = Object.keys(localsData).some(key => localsData?.[key]?.[value]);
   if (!checkHasLocales) {return;};
 
   try {
