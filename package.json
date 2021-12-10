@@ -3,7 +3,7 @@
 	"displayName": "react-intl-umi",
 	"publisher": "xiangming",
 	"description": "react-intl umi-locale 国际化自动提示插件",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"icon": "logo.png",
 	"repository": "https://github.com/xiangming25/react-intl-umi",
 	"engines": {
@@ -37,7 +37,7 @@
 				},
 				"react-intl-umi.regExp": {
 					"type": "string",
-					"default": "intl.formatMessage({ id: '$1' })",
+					"default": "id: '$1'",
 					"description": "在代码中的匹配规则（$1为需要匹配的字符串内容）"
 				},
 				"react-intl-umi.watchMode": {
