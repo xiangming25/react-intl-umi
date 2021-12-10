@@ -3,7 +3,7 @@
 	"displayName": "react-intl-umi",
 	"publisher": "xiangming",
 	"description": "react-intl umi-locale 国际化自动提示插件",
-	"version": "0.0.8",
+	"version": "0.0.9",
 	"icon": "logo.png",
 	"repository": "https://github.com/xiangming25/react-intl-umi",
 	"engines": {

@@ -23,22 +23,40 @@
 ### 国际化配置文件更新后，自动刷新提示内容
 
 
+## 配置项
+
+名字 | 描述 | 默认值
+---|---|---
+react-intl-umi.configPath | 国际化配置文件的地址 | src/locales
+react-intl-umi.suffix | 国际化文件的后缀(排除当前文件夹下面其它类型文件 | .ts
+react-intl-umi.regExp | 在代码中的匹配规则（$1为需要匹配的字符串内容） | id: '$1'
+react-intl-umi.watchMode | 监听国际化文件的变化 | true
 
 ### 自定义提示模板
 
-`intl.formatMessage({ id: '$1' })`
+`"react-intl-umi.regExp": "id:? ?=?'$1'"`
 
-```
-{intl.formatMessage({ id: 'pages.getCaptchaSecondText' }
-```
-
-`id: '$1'`
+同时支持
 
 ```
 intl.formatMessage({
   id: 'pages.login.phoneLogin.getVerificationCode',
   defaultMessage: '获取验证码',
 })
+```
+
+和
+
+```
+<FormattedMessage id="pages.welcome.advancedComponent" defaultMessage="Advanced Form" />
+```
+
+## 注意
+
+建议项目尽量统一，放宽匹配规则的限制（匹配规则更改为：`id:? ?=?'$1'`），有时候其它不是国际化的代码也会默认进入插件中来。比如：
+
+```
+<div id="root"></div>
 ```
 
 ## 参考链接
