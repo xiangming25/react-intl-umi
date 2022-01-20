@@ -90,10 +90,10 @@
   resolved "https://registry.npmmirror.com/@types/node/download/@types/node-14.17.34.tgz#fe4b38b3f07617c0fa31ae923fca9249641038f0"
   integrity sha512-USUftMYpmuMzeWobskoPfzDi+vkpe0dvcOBRNOscFrGxVp4jomnRxWuVohgqBow2xyIPC0S3gjxV/5079jhmDg==
 
-"@types/vscode@^1.62.0":
-  version "1.62.0"
-  resolved "https://registry.npmmirror.com/@types/vscode/download/@types/vscode-1.62.0.tgz#b4d6d192d5aeb75e91d0adef689c3ecef9879da7"
-  integrity sha1-tNbRktWut16R0K3vaJw+zvmHnac=
+"@types/vscode@^1.45.0":
+  version "1.63.1"
+  resolved "https://registry.npmmirror.com/@types/vscode/download/@types/vscode-1.63.1.tgz#b40f9f18055e2c9498ae543d18c59fbd6ef2e8a3"
+  integrity sha512-Z+ZqjRcnGfHP86dvx/BtSwWyZPKQ/LBdmAVImY82TphyjOw2KgTKcp7Nx92oNwCTsHzlshwexAG/WiY2JuUm3g==
 
 "@typescript-eslint/eslint-plugin@^5.1.0":
   version "5.5.0"

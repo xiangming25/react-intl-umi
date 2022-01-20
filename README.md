@@ -10,6 +10,10 @@
 
 ## 特色
 
+### 快速输出模板代码
+
+输入 `intl` 后，按 `Enter` 键，自动生成 `intl.formatMessage({ id: '' })` 模板代码。
+
 ### 鼠标移动上去后，自动弹框提示
 
 ![](https://gitee.com/xiangming25/picture/raw/master/2021-12-5/1638714132577-image.png)
