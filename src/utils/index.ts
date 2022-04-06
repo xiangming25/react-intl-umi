@@ -169,8 +169,7 @@ export function getTips(value:string, dictionary:any){
   let str='';
   for (const k of Object.keys(dictionary)) {
     if(dictionary[k][value]){
-      str += `
-      "${k}" : "${dictionary[k][value].value}"  `;
+      str += `"${k}" : "${dictionary[k][value].value}"\n\n`;
     }
   }
   if(str==='') {str="没有找到该key值的多语言,请检查是否正确设置了?";};
