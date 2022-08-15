@@ -89,7 +89,8 @@ function formatChildDetail(str: string, childPath: string) {
   childContentArr?.forEach(item => {
     const itemArr = item.split(':');
     resultObj[itemArr[0].replace(/['"]/g, '')] = {
-      value: itemArr[1].replace(valueReg, '$2'),
+      // 解决 value 中有 : 问题
+      value: itemArr.slice(1).join(':').replace(valueReg, '$2'),
       path: childPath,
     };
   });
