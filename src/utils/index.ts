@@ -131,12 +131,12 @@ export function getRangeText(str: string, character: number, regExp: string) {
 /** 解析正则表达式 */
 export function getRegExp(regExpStr:string){
   if(/\\/.test(regExpStr)){
-    window.showInformationMessage("react-intl-universal-i18n插件RegExp设置不支持\\反斜线");
+    window.showInformationMessage("react-intl-umi插件RegExp设置不支持\\反斜线");
     return;
   }
 
   if(!/\$1/.test(regExpStr)){
-    window.showInformationMessage("react-intl-universal-i18n插件RegExp设置必须存在$1");
+    window.showInformationMessage("react-intl-umi插件RegExp设置必须存在$1");
     return;
   }
 
