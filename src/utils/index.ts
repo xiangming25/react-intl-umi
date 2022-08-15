@@ -80,8 +80,8 @@ async function getContent(localesPath: string, directory: [string, FileType][]) 
  * @returns
  */
 function formatChildDetail(str: string, childPath: string) {
-  const contentReg = /(['"`]?[\w-.]+['"`]?:\s?['"`].*?['"`])/g;
-  const valueReg = /^\s{0,}['"`](.*?)['"`]/;
+  const contentReg = /(['"`]?[\w-.]+['"`]?:\s?(['"`]).*?\2)/g;
+  const valueReg = /^\s{0,}(['"`])(.*?)\1/;
 
   const newStr = str.replace(/(:\s{0,})[\n\r]\s{0,}(['"`])/g, '$1$2');
   const resultObj: IObject = {};
@@ -89,7 +89,7 @@ function formatChildDetail(str: string, childPath: string) {
   childContentArr?.forEach(item => {
     const itemArr = item.split(':');
     resultObj[itemArr[0].replace(/['"]/g, '')] = {
-      value: itemArr[1].replace(valueReg, '$1'),
+      value: itemArr[1].replace(valueReg, '$2'),
       path: childPath,
     };
   });
@@ -169,7 +169,7 @@ export function getTips(value:string, dictionary:any){
   let str='';
   for (const k of Object.keys(dictionary)) {
     if(dictionary[k][value]){
-      str += `"${k}" : "${dictionary[k][value].value}"\n\n`;
+      str += `${k} : ${dictionary[k][value].value}\n\n`;
     }
   }
   if(str==='') {str="没有找到该key值的多语言,请检查是否正确设置了?";};
