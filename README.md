@@ -5,7 +5,6 @@
 ## 前提条件
 
 - 打开的 `vscode` 项目是根目录。比如：直接打开 `example` 项目。而不是打开 `react-intl-umi` 项目，然后 `example` 项目在 `react-intl-umi` 下面。
-- 国际化配置语言下面的引用路径需要是相对路径。
 - 注意 `react-intl-umi.regExp` 中的空格与代码是否一致。建议结合 `eslint` 一起使用。
 
 ## 特色
@@ -62,7 +61,3 @@ intl.formatMessage({
 ```
 <div id="root"></div>
 ```
-
-## 参考链接
-
-[react-intl-universal-i18n](https://github.com/Java-http/react-intl-universal-i18n)

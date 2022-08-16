@@ -17,7 +17,7 @@ export async function checkHasLocales() {
     let directory = await fs.readDirectory(Uri.file(localesPath));
     // 只读取后缀为 js, jsx, ts, tsx, json 类的文件的内容
     directory = directory.filter(item => /.js|.jsx|.ts|.tsx|.json$/.test(item[0]));
-    result = await getContent(localesPath, directory); 
+    result = await getContent(localesPath, directory, workspaceFolders[i].uri.fsPath);
   }
   localsData = result;
   return result;
@@ -25,7 +25,7 @@ export async function checkHasLocales() {
 
 export { localsData };
 
-async function getContent(localesPath: string, directory: [string, FileType][]) {
+async function getContent(localesPath: string, directory: [string, FileType][], baseLocalesPath: string) {
   if (!directory.length) {return;};
 
   const { fs } = workspace;
@@ -50,14 +50,18 @@ async function getContent(localesPath: string, directory: [string, FileType][]) 
         };
       });
       // 匹配项目中的相对路径
-      const importUrls = contentStr.match(/(?<=import.*?['"]\.).*(?=['"])/g);
+      const importUrls = contentStr.match(/(?<=import.*?['"]).*(?=['"])/g);
       if (!importUrls?.length) {
         result[fileName] = obj;
         continue;
       }
       // 循环读取引入文件中的内容
       for (let j = 0; j<importUrls.length; j++) {
-        const childPath = `${localesPath}${importUrls[j]}${config.suffix}`;
+        const newImportUrl = importUrls[j].replace(/\.|@/, '');
+        // 判断是否包含绝对路径引入符号
+        const childPath = !importUrls[j].includes('@') ?
+          `${localesPath}${newImportUrl}${config.suffix}` :
+          `${baseLocalesPath}/src${newImportUrl}${config.suffix}`;
         const childContent = await fs.readFile(Uri.file(childPath));
         const childContentObj = formatChildDetail(childContent.toString(), childPath);
         obj = {
