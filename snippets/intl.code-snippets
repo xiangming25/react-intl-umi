@@ -1,9 +1,16 @@
 {
-  "intl-formatMessage": {
+  "intl": {
     "prefix": "intl",
     "body": [
       "intl.formatMessage({ id: '$1' })",
     ],
     "description": "国际化代码片段"
-  }
+  },
+  "intl-with-defaultMessage": {
+    "prefix": "intld",
+    "body": [
+      "intl.formatMessage({ id: '$1', defaultMessage: '$2' })",
+    ],
+    "description": "国际化代码片段"
+  },
 }

@@ -10,7 +10,10 @@ let registerDefinitionProvider: vscode.Disposable | undefined;
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export async function activate() {
-	const result = await checkHasLocales();
+	let result;
+	try {
+		result = await checkHasLocales();
+	} catch (error) {}
 	// 如果没有查询到国际化配置语言，不进行后面的注册事件
 	if (!result) {
 		return;

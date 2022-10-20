@@ -14,7 +14,13 @@ export async function checkHasLocales() {
 
   for (let i = 0; i< workspaceFolders?.length;i++) {
     const localesPath = `${workspaceFolders[i].uri.fsPath}/${config.configPath}`;
-    let directory = await fs.readDirectory(Uri.file(localesPath));
+    let directory;
+    try {
+      directory = await fs.readDirectory(Uri.file(localesPath));
+    } catch (error) {
+      // console.log('log:error------0-------: ', error);
+    }
+    if (!directory) {return;}
     // 只读取后缀为 js, jsx, ts, tsx, json 类的文件的内容
     directory = directory.filter(item => /.js|.jsx|.ts|.tsx|.json$/.test(item[0]));
     result = await getContent(localesPath, directory, workspaceFolders[i].uri.fsPath);
